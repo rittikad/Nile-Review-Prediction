@@ -7,79 +7,142 @@
 
 ---
 
-## 📌 Project Overview
-This project predicts which customers are likely to leave **positive reviews** on Nile, a South American eCommerce platform. By leveraging **Gradient Boosted Decision Trees (GBDT)** and following the **CRISP-DM framework**, the model enables resource-efficient marketing and strengthens platform credibility.
+# Nile Review Prediction Project
+
+## 📝 Project Overview
+
+This project focuses on predicting **customers likely to leave positive reviews** for Nile, a major South American eCommerce platform. By leveraging **Gradient Boosted Decision Trees (GBDT)** and feature engineering based on operational and customer data, the model aims to optimize **targeted review requests**, improving customer engagement, operational efficiency, and overall platform credibility.
 
 ---
 
-## 🎯 Business Problem
-Positive reviews directly impact **brand reputation and sales**. Nile lacked the ability to efficiently target customers likely to leave favorable reviews.  
-**Objective:** Build a predictive model to identify high-potential reviewers and optimize marketing outreach.
+## 📌 Business Problem
+
+For eCommerce platforms like **Nile**, **positive customer reviews are crucial** for brand reputation, customer trust, and sales growth. Currently, Nile faces challenges:  
+
+- Inefficient targeting of customers likely to leave positive reviews  
+- Wasted marketing resources when requesting reviews from customers unlikely to provide favorable feedback  
+- Missed opportunities to improve service quality based on review insights  
+
+**Problem Statement:**  
+> How can Nile efficiently identify and engage customers who are most likely to leave positive reviews, optimizing resources and enhancing platform reputation?  
 
 ---
 
-## 📊 Data Understanding
-- **Eight tables** provided, including customer, order, product, review, and payment data  
-- **Target variable:** Review score  
-  - 4–5 stars → Positive Review (1)  
-  - 1–3 stars → Negative Review (0)  
-- **Key Features:**  
-  - `order_approving_time`, `delivery_time`, `delivery_date_diff` (time-phase features)  
-  - Customer demographics, product attributes, and payment data  
-- Dataset contains **~80,000 records**, slightly imbalanced towards positive reviews
+## 💡 Business Impact
+
+Implementing a predictive review model enables Nile to:  
+
+1. **Increase Positive Reviews** – Target customers likely to leave 4-5 star reviews, improving overall review scores.  
+2. **Optimize Marketing Resources** – Focus efforts on high-potential customers, reducing campaign costs.  
+3. **Enhance Customer Experience** – Analyze operational factors like delivery time and order approval speed, improving satisfaction.  
+4. **Drive Revenue Growth** – Positive reviews build trust → higher conversion rates and repeat purchases.  
+
+**Bottom Line:**  
+> Predictive analytics allows Nile to **strategically engage customers**, improve operational efficiency, and maximize ROI on marketing campaigns.  
 
 ---
 
-## 🛠 Data Preparation
-- **Duplicates removed** based on `order_id`  
-- **Outliers handled** by removing top extreme timestamp differences  
-- **Categorical encoding**:  
-  - Low cardinality → One-Hot Encoding (`order_status`, `customer_state`)  
-  - High cardinality → Frequency Encoding (`customer_unique_id`, `seller_id`)  
-- **Feature engineering:** Time-based metrics, binary target variable
+## 🗂 Dataset Overview
+
+Nile provided **8 tables** in CSV format:
+
+| Table Name | Description |
+|------------|-------------|
+| `olist_customers_dataset` | Customer demographics and unique customer IDs |
+| `olist_orders_dataset` | Order details including timestamps, status, and customer IDs |
+| `olist_order_items_dataset` | Information on products in each order (product ID, quantity, price, freight) |
+| `olist_products_dataset` | Product details including category, weight, and seller IDs |
+| `olist_order_reviews_dataset` | Customer reviews with `review_score` and textual comments |
+| `olist_sellers_dataset` | Seller IDs and locations |
+| `olist_order_payments_dataset` | Payment type and transaction values for each order |
+| `product_category_name_translation.csv` | Translation of product categories to English |
+
+**Key Points:**
+
+- Central table: `olist_order_reviews_dataset` (contains the review score)  
+- Relationships: Orders link customers, products, reviews, and payments  
+- Dataset size: ~80,000 orders  
 
 ---
 
-## 🧩 Modelling Approach
-- **Algorithms tested:** GBDT, XGBoost, Random Forest  
-- **Chosen Model:** GBDT for its high recall and F1-score for positive reviews  
-- **Data split:** 80% training, 20% testing  
-- **Evaluation Metrics:** Accuracy, Precision, Recall, F1-score (macro-averaged)  
-- **Hyperparameter tuning:** RandomizedSearchCV optimizing for positive review detection
+## 🧹 Data Preparation
+
+1. **Handling Duplicates** – Retained first occurrence of `order_id` to ensure unique entries.  
+2. **Outliers Removal** – Removed extreme delays in timestamps impacting review predictions.  
+3. **Data Joins** – Combined tables to form a comprehensive dataset:  
+   - `Order Reviews` + `Order Items` + `Products`  
+   - `Order Reviews` + `Customers` + `Orders`  
+   - `Order Reviews` + `Order Payments`  
+4. **Missing Values** – Removed ~1.5% of records with missing data.  
+5. **Feature Engineering** – Created time-phase features:  
+   - `order_approving_time` = approval timestamp – purchase timestamp  
+   - `delivery_time` = delivered date – purchase date  
+   - `delivery_date_diff` = delivered date – estimated delivery date  
+   - Converted `review_score` to binary: 4-5 stars → positive (1), 1-3 stars → negative (0)  
+6. **Encoding Categorical Features** –  
+   - One-Hot Encoding for low-cardinality features  
+   - Frequency Encoding for high-cardinality features  
+
+---
+
+## 🤖 Modelling
+
+- **Algorithm:** Gradient Boosted Decision Trees (GBDT) – effective for structured, imbalanced datasets  
+- **Alternative Models Tested:** XGBoost, Random Forest  
+- **Dataset Split:** 80% training, 20% testing (~67k train, 16k test)  
+
+**Performance Metrics (Macro Average, Binary Classification):**
+
+| Metric | Training | Testing | Notes |
+|--------|---------|--------|-------|
+| Accuracy | 0.822 | 0.821 | High proportion correctly classified |
+| Precision | 0.815 | 0.807 | Strong ability to minimize false positives |
+| Recall | 0.607 | 0.595 | Moderate ability to detect true positives |
+| F1-Score | 0.627 | 0.611 | Balanced trade-off between precision and recall |
 
 ---
 
 ## 📊 Results Summary
 
-| Insight | Observation | Business Implication |
-|---------|------------|--------------------|
-| Positive Review Prediction Accuracy | GBDT achieved 82% accuracy, 0.82 precision | Reliably identifies high-potential customers |
-| Service Timeliness | Delivery time and delivery date accuracy most predictive | Faster and accurate delivery boosts positive reviews |
-| Customer Demographics | Certain regions/purchase patterns correlate with positive reviews | Targeted marketing can enhance engagement |
-| Imbalanced Data | Positive reviews dominate; recall for negatives is lower | Apply SMOTE/undersampling to better predict negative reviews |
-| Operational Efficiency | Shorter order approval times correlate with higher review scores | Streamlining approvals improves review likelihood |
+- **Best Model:** GBDT, due to high recall and F1-score for positive reviews  
+- **Top Features Driving Predictions:**  
+  1. `delivery_date_diff` – actual vs. estimated delivery difference  
+  2. `delivery_time` – faster deliveries increase positive review probability  
+  3. `order_approving_time` – shorter approval times → more positive reviews  
+  4. Customer demographics, product category, payment type  
+
+**Business Insight:**  
+> Customers who receive orders faster and as expected are more likely to leave positive reviews. Targeting these customers maximizes review generation efficiency.  
 
 ---
 
-## 🔍 Model Evaluation
-- **GBDT** outperformed XGBoost and Random Forest in recall and F1-score for Class 1 (positive reviews)  
-- **Top features:** Delivery date difference, delivery time, order approval time, product category  
-- **Imbalance handling:** Future improvement with SMOTE or undersampling recommended  
+## ⚙️ Deployment Plan
+
+1. **Phase 1 – Model Deployment** – Cloud infrastructure, ETL pipelines, pilot A/B testing  
+2. **Phase 2 – System Integration** – Integrate with CRM and logistics systems, automate targeting using APIs  
+3. **Phase 3 – Continual Learning** – Monitor data drift, retrain model regularly to maintain accuracy  
 
 ---
 
-## 🚀 Deployment Plan
-1. **Phase 1 – Model Deployment:** Cloud setup and ETL pipelines, pilot A/B testing  
-2. **Phase 2 – System Integration:** CRM and logistics integration via APIs  
-3. **Phase 3 – Continual Learning:** Automated retraining for data drift adaptation
+## 📌 Recommendations
+
+1. **Handle Imbalanced Data** – Apply SMOTE or undersampling to improve detection of negative reviews  
+2. **Analyze Review Comments** – Use NLP for sentiment analysis and topic modeling  
+3. **Optimize Marketing Strategies** – Focus resources on customers predicted to leave positive reviews  
 
 ---
 
-## 📌 Key Recommendations
-- Apply **SMOTE/undersampling** to handle imbalanced classes  
-- Analyze **textual review comments** using NLP (sentiment analysis, topic modelling)  
-- Focus on **operational metrics** like delivery and approval times  
-- Roll out **gradually** for monitoring ROI and model performance  
+## 🔑 Conclusion
+
+The **GBDT model** effectively identifies customers likely to leave positive reviews, enabling Nile to:  
+
+- Improve customer engagement  
+- Optimize marketing spend  
+- Enhance platform reputation  
+- Drive revenue growth through targeted strategies  
+
+**Key Takeaways:**  
+> Time-phase features and careful feature engineering were critical in boosting predictive performance. Continuous deployment and retraining ensure sustained business value.
 
 ---
 
