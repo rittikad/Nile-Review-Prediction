@@ -116,10 +116,6 @@ Nile provided **8 tables** in CSV format:
 | Recall | 0.607 | 0.595 | Moderate detection of true positives |
 | F1-Score | 0.627 | 0.611 | Balanced trade-off |
 
-**Visual Placeholder:**  
-![Confusion Matrix](images/confusion_matrix.png)  
-*Figure: Confusion matrix for GBDT model*
-
 ---
 
 ## 📊 Results Summary
@@ -135,10 +131,6 @@ Nile provided **8 tables** in CSV format:
 
 **Business Insight:**  
 > Customers receiving faster, on-time deliveries are more likely to leave positive reviews. Targeting these customers maximizes review generation efficiency.
-
-**Visual Placeholder:**  
-![Feature Importance](images/feature_importance.png)  
-*Figure: Top 10 features influencing review predictions*
 
 ---
 
