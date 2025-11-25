@@ -150,7 +150,7 @@ The **GBDT model** effectively identifies customers likely to leave positive rev
 
 | Folder/File | Description |
 |-------------|-------------|
-| `Data/` | Raw CSV datasets and processed data |
+| `Data/` | Processed data |
 | `Code/` | Data cleaning, feature engineering, and model scripts |
 | `Report/` | Full technical report with methodology, results, and recommendations |
 | `Presentation/` | Pitch slides for Nile management board |
@@ -173,8 +173,8 @@ The **GBDT model** effectively identifies customers likely to leave positive rev
 ---
 
 ## 📌 Quick Links
-- [Report PDF](./Report/Nile_Review_Prediction_Report.pdf)  
-- [Presentation Slides](./Presentation/Nile_Review_Pitch.pdf)  
-- [Jupyter Notebook / Code](./Code/Nile_Review_Prediction.ipynb)  
-- [Data](./Data/)
+- [Report PDF](Report/group_number_32_report.pdf)  
+- [Presentation Slides](Presentation/group_number_32_presentation.pdf)  
+- [Jupyter Notebook / Code](Code/group_number_32_code.ipynb)  
+- [Data](Data.zip)
 
